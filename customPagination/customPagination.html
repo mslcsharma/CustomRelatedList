@@ -1,0 +1,35 @@
+<!--
+  @File Name          : customPagination.html
+  @Description        : This component is used to add pagination in table. This component is reusable component.
+-->
+
+<template>
+   <!-- Starting of Component -->
+   <!-- Previous and Next Button with Number of Pages.-->
+    <div class="slds-align_absolute-center">
+        <ul class="slds-button-group-row">
+           <!-- Checking if We have Prev Page or not. If not this button will not be visible.-->
+           <template if:true={hasPrev}>
+              <li class="slds-button-group-item" >
+                 <button class="slds-button slds-button_neutral" onclick ={onPrev}> &lt;
+                 </button>
+              </li>
+           </template>
+           <!-- Button for pages. Number of button will be show here will be handled by set_size variable in JS.-->
+           <template for:each={pagesList} for:item= "pageNumber">
+              <li class="slds-button-group-item" key={pageNumber}>
+                 <button data-id={pageNumber} class="slds-button slds-button_neutral"
+                    onclick={onPageClick}>{pageNumber}</button>
+              </li>
+           </template>
+            <!-- Checking if We have next Page or not. If not this button will not be visible.-->
+           <template if:true={hasNext}>
+              <li class="slds-button-group-item" >
+                 <button class="slds-button slds-button_neutral" onclick={onNext}
+                    >&gt;</button>
+              </li>
+           </template>
+        </ul>
+     </div>
+     <!-- Ending of Component -->
+</template>
