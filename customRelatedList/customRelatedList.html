@@ -1,0 +1,124 @@
+<template>
+    <div class="related-list-style-div"></div>
+    <div class="slds-card_boundary">
+        <div class="slds-page-header related-list-header">
+            <div class="slds-page-header__row">
+                <div class="slds-page-header__col-title">
+                    <div class="slds-media">
+                        <div class="slds-media__figure">
+                            <lightning-icon
+                                icon-name={iconName}
+                                alternative-text={relatedListTitle}
+                                size="small"
+                                title="large size"
+                            ></lightning-icon>
+                        </div>
+                        <div class="slds-media__body">
+                            <div class="slds-page-header__name">
+                                <div class="slds-page-header__name-title">
+                                    <h1>
+                                        <span class="slds-page-header__title slds-truncate related-list-title" title={relatedListTitleWithCount}>
+                                            {relatedListTitleWithCount}
+                                        </span>
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-page-header__col-actions">
+                    <div class="slds-page-header__controls">
+                        <template if:true={showNewButton}>
+                            <div class="slds-page-header__control">
+                                <ul class="slds-button-group-list">
+                                    <li>
+                                        <lightning-button variant="neutral" label="New" onclick={navigateToNewRecordPage}></lightning-button>
+                                    </li>
+                                    <li>
+                                        <lightning-button variant="neutral" label="Edit" onclick={handleUpdate}></lightning-button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </template>
+                        
+                    </div>
+                </div>
+            </div>
+            <template if:true={showListMeta}>
+                <div class="slds-page-header__row">
+                    <div class="slds-page-header__col-meta">
+                        <p class="slds-page-header__meta-text related-list-meta">{recordCount} items • Sorted by {sortedByFieldLabel}</p>
+                    </div>
+                </div>
+            </template>
+        </div>
+        <lightning-layout multiple-rows>
+            <lightning-layout-item size="6" padding="around-small"></lightning-layout-item>
+            <lightning-layout-item size="6" padding="around-small">
+                <lightning-input type="search" label="Search Records" onchange={handleSearch}></lightning-input>
+            </lightning-layout-item>
+        </lightning-layout>
+
+        <div class="related-list-body">
+            <template if:true={showLoading}>
+                <lightning-spinner alternative-text="Loading"></lightning-spinner>
+            </template>
+            <lightning-datatable
+                key-field="Id"
+                columns={dataTableColumns}
+                data={currentPageData}
+                sorted-direction={sortDirection}
+                sorted-by={sortedBy}
+                onsort={handleSort}
+                enable-infinite-loading
+                onsave={handleSave}
+                draft-values={draftValues}
+            >
+            </lightning-datatable>
+            <template if:true={notes}>
+                <c-custom-pagination tabledata={notes} onchange={pageChanged} per-page=5 set-size=5></c-custom-pagination>
+            </template>
+            <template if:true={showEmptyMessage}>
+                <div style="height: 10vh; background: #f3f3f3" class="slds-align_absolute-center">
+                    <p>
+                        <template if:false={unsupportedListview}>No items to display</template>
+                    </p>
+                </div>
+            </template>
+        </div>
+    </div>
+    <template if:true={showEditModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <!-- modal header start -->
+            <header class="slds-modal__header">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={hideEditModal}>
+                    <lightning-icon icon-name="utility:close"
+                    alternative-text="close"
+                    variant="inverse"
+                    size="small" ></lightning-icon>
+                    <span class="slds-assistive-text">Close</span>
+                </button>
+                <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Edit Records</h2>
+            </header>
+        
+            <!-- modal body start -->
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <lightning-record-edit-form
+                    object-api-name={noteObjectApiName}
+                    onsubmit={saveRecords}>
+                    <template if:true={fieldsToEdit} for:each={fieldsToEdit} for:item="field">
+                        <lightning-input-field
+                            key={field}
+                            field-name={field}
+                            value={field.value}>
+                        </lightning-input-field>
+                    </template>
+                    <lightning-button class="slds-align_absolute-center"  variant="brand" type="submit" label="Save"></lightning-button>
+                </lightning-record-edit-form>
+            </div>
+        </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

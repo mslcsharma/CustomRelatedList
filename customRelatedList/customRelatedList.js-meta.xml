@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Custom Related List</masterLabel>
+    <description>The component displays a Custom Related List.</description>
+    <targets>
+        <target>lightning__RecordPage</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <property name="iconName" type="String" label="Related list icon name" default="standard:case" description="Refer to SLDS icons." required="true"/>
+            <property name="noteObjectApiName" type="String" label="Child Object API name" default="Case" description="Enter the API name of the child object." required="true"/>
+            <property name="relatedListTitle" type="String" label="Related List Title" default="Related Cases" description="The title of the related list to be displayed." required="true"/>
+            <property name="notesRelatedList" type="String" label="Related List ID" default="Cases" required="true" description="Child Relationship Name (Append '__r' if needed)." />
+            <property name="pNotesFields" type="String" label="List Columns" default="CaseNumber,CreatedDate,CreatedBy.Alias,IsClosed" description="Provide API names of the fields in the child object (comma separated)." placeholder="Field1, Field2__c, Lookup.Name, etc." required="true" />
+            <property name="showNewButton" type="Boolean" label="Allow users to create records" description="Enable to show the New button on the related list" default="true" />
+            <property name="sortedBy" type="String" label="Sorted By (Default)" default="CreatedDate" description="Provide the API name of the field in the child object, to sort the list by default." required="true" />
+            <property name="sortDirection" type="String" label="Default sort direction" default="desc" datasource="asc,desc" required="true" />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>
